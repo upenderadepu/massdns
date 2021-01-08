@@ -60,7 +60,7 @@ socklen_t sockaddr_storage_size(struct sockaddr_storage *storage)
     {
         return sizeof(struct sockaddr_in6);
     }
-    return 0;
+    abort();
 }
 
 #ifdef HAVE_EPOLL
@@ -208,7 +208,7 @@ char *sockaddr2str(struct sockaddr_storage *addr)
         // inet_ntop does not allow us to determine, how long the printed string was.
         // Thus, we have to use strlen.
     }
-    else
+    else if(addr->ss_family == AF_INET6)
     {
         str[0] = '[';
         port = ntohs(((struct sockaddr_in6*)addr)->sin6_port);
@@ -216,6 +216,10 @@ char *sockaddr2str(struct sockaddr_storage *addr)
         len = strlen(str);
         str[len++] = ']';
         str[len] = 0;
+    }
+    else
+    {
+        abort();
     }
 
     snprintf(str + len, sizeof(str) - len, ":%" PRIu16, port);

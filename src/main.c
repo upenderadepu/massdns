@@ -652,7 +652,9 @@ void send_query(lookup_t *lookup)
     {
         if(errno != EAGAIN && errno != EWOULDBLOCK)
         {
-            log_msg("Error sending: %s\n", strerror(errno));
+            log_msg("Error sending: %s (fd: %d, resolver: %s, query: %s %s)\n", strerror(errno),
+                    lookup->socket->descriptor, sockaddr2str(&lookup->resolver->address),
+                    dns_record_type2str(lookup->key->type), dns_name2str(&lookup->key->name));
         }
     }
 }
