@@ -3,6 +3,9 @@ PREFIX=/usr/local
 all:
 	mkdir -p bin
 	$(CC) $(CFLAGS) -O3 -std=c11 -DHAVE_EPOLL -DHAVE_SYSINFO -Wall -fstack-protector-strong src/main.c -o bin/massdns
+asan:
+	mkdir -p bin
+	$(CC) $(CFLAGS) -O0 -g -DDEBUG -std=c11 -DHAVE_EPOLL -DHAVE_SYSINFO -Wall -fstack-protector-strong -fsanitize=address -lasan src/main.c -o bin/massdns
 debug:
 	mkdir -p bin
 	$(CC) $(CFLAGS) -O0 -std=c11 -DHAVE_EPOLL -DHAVE_SYSINFO -Wall -g -DDEBUG src/main.c -o bin/massdns
